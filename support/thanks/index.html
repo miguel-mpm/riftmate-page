@@ -10,14 +10,18 @@
 <body>
 
 <!-- Nav -->
-<nav class="nav">
+<nav class="nav is-scrolled" id="nav">
   <div class="nav-inner">
-    <a href="/riftmate/" class="nav-logo"><span>RiftMate</span></a>
+    <a href="/riftmate/" class="nav-logo" aria-label="RiftMate home">
+      <img src="../../images/riftmate_icon.png" class="nav-icon" alt="" width="28" height="28">
+      <span>RiftMate</span>
+    </a>
     <div class="nav-links">
       <a href="/riftmate/">Home</a>
       <a href="/riftmate/support">Support</a>
       <a href="/riftmate/privacy">Privacy</a>
     </div>
+    <a href="https://apps.apple.com/app/6758271118" class="nav-cta">Download</a>
   </div>
 </nav>
 
@@ -25,21 +29,27 @@
 <main class="page-content" style="text-align: center; padding-top: 120px;">
   <div style="font-size: 3rem; margin-bottom: 20px;">✅</div>
   <h1>Message Sent</h1>
-  <p style="color: var(--text-muted); margin-top: 16px; font-size: 1.1rem;">Thanks for reaching out! We'll get back to you as soon as we can.</p>
+  <p style="color: var(--text-2); margin-top: 16px; font-size: 1.1rem;">Thanks for reaching out! We'll get back to you as soon as we can.</p>
   <div style="margin-top: 36px;">
-    <a href="/riftmate/" class="btn btn-secondary">Back to Home</a>
+    <a href="/riftmate/" class="btn btn-ghost">Back to Home</a>
   </div>
 </main>
 
 <!-- Footer -->
 <footer class="footer">
   <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="../../images/riftmate_icon.png" alt="" width="22" height="22" class="footer-icon">
+      <span>RiftMate</span>
+    </div>
     <div class="footer-links">
       <a href="/riftmate/">Home</a>
       <a href="/riftmate/support">Support</a>
-      <a href="/riftmate/privacy">Privacy Policy</a>
+      <a href="/riftmate/privacy">Privacy</a>
     </div>
-    <p>&copy; 2025 RiftMate. All rights reserved.</p>
+    <p class="footer-fine">
+      &copy; 2025 RiftMate. Not affiliated with or endorsed by Riot Games. League of Legends is a trademark of Riot Games, Inc.
+    </p>
   </div>
 </footer>
 
