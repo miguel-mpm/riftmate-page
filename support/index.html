@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support — RiftMate</title>
+  <meta name="description" content="Get help with RiftMate. Report bugs, ask questions, or request features.">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/riftmate/" class="nav-logo"><span>RiftMate</span></a>
+    <div class="nav-links">
+      <a href="/riftmate/">Home</a>
+      <a href="/riftmate/support" class="active">Support</a>
+      <a href="/riftmate/privacy">Privacy</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Content -->
+<main class="page-content">
+  <h1>Support</h1>
+  <p class="support-intro">
+    Having trouble with RiftMate, or want to request a feature? Fill out the form below and we'll get back to you as soon as possible. You can also email us directly at <a href="mailto:miguel.pacheco.moran@gmail.com">miguel.pacheco.moran@gmail.com</a>.
+  </p>
+
+  <form class="support-form" action="https://formsubmit.co/miguel.pacheco.moran@gmail.com" method="POST">
+    <!-- Honeypot spam protection -->
+    <input type="text" name="_honey" style="display:none">
+    <!-- Disable captcha page -->
+    <input type="hidden" name="_captcha" value="false">
+    <!-- Redirect back to support page after submission -->
+    <input type="hidden" name="_next" value="https://miguel-mpm.github.io/riftmate/support/thanks">
+    <input type="hidden" name="_subject" value="RiftMate Support Request">
+
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" placeholder="Your name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required>
+    </div>
+
+    <div class="form-group">
+      <label for="category">Category</label>
+      <select id="category" name="category" required>
+        <option value="" disabled selected>Select a category</option>
+        <option value="bug">Bug Report</option>
+        <option value="feature">Feature Request</option>
+        <option value="question">General Question</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="message">Message</label>
+      <textarea id="message" name="message" placeholder="Describe your issue or request…" required></textarea>
+    </div>
+
+    <div class="form-submit">
+      <button type="submit" class="btn btn-primary">Send Message</button>
+    </div>
+  </form>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="/riftmate/">Home</a>
+      <a href="/riftmate/support">Support</a>
+      <a href="/riftmate/privacy">Privacy Policy</a>
+    </div>
+    <p>&copy; 2025 RiftMate. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
