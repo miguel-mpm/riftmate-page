@@ -208,7 +208,19 @@
   <div class="device-shots">
     <img class="device-shot is-active" data-shot="1" src="images/frame_filled_1.png" alt="RiftMate game library with recorded League of Legends matches">
     <img class="device-shot" data-shot="2" src="images/frame_filled_2.png" alt="Replay view with event timeline">
-    <img class="device-shot" data-shot="3" src="images/frame_filled_2.png" alt="Death review filter on the timeline">
+  </div>
+  <!-- Mobile carousel controls -->
+  <div class="device-nav">
+    <button class="device-btn device-prev" aria-label="Previous screenshot">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="device-dots">
+      <button class="device-dot is-active" data-dot="1" aria-label="Screenshot 1"></button>
+      <button class="device-dot" data-dot="2" aria-label="Screenshot 2"></button>
+    </div>
+    <button class="device-btn device-next" aria-label="Next screenshot">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+    </button>
   </div>
 </div>
 
@@ -230,14 +242,41 @@
   // ── Story: swap screenshots on step enter ──
   const steps = document.querySelectorAll('.story-step');
   const shots = document.querySelectorAll('.device-shot');
+  const dots  = document.querySelectorAll('.device-dot');
+  let currentShot = 1;
+  const totalShots = shots.length;
 
   const setActive = (n) => {
+    currentShot = Number(n);
     steps.forEach(s => s.classList.toggle('is-active', s.dataset.step === String(n)));
     shots.forEach(s => s.classList.toggle('is-active', s.dataset.shot === String(n)));
+    dots.forEach(d => d.classList.toggle('is-active', d.dataset.dot === String(n)));
   };
 
+  // ── Mobile carousel prev/next ──
+  document.querySelector('.device-prev').addEventListener('click', () => {
+    setActive(currentShot <= 1 ? totalShots : currentShot - 1);
+  });
+  document.querySelector('.device-next').addEventListener('click', () => {
+    setActive(currentShot >= totalShots ? 1 : currentShot + 1);
+  });
+  dots.forEach(d => d.addEventListener('click', () => setActive(d.dataset.dot)));
+
+  // ── Swipe on device to change screenshots ──
+  const deviceEl = document.getElementById('device');
+  let touchX0 = null;
+  deviceEl.addEventListener('touchstart', e => { touchX0 = e.touches[0].clientX; }, { passive: true });
+  deviceEl.addEventListener('touchend', e => {
+    if (touchX0 === null) return;
+    const dx = e.changedTouches[0].clientX - touchX0;
+    touchX0 = null;
+    if (Math.abs(dx) < 40) return;
+    if (dx < 0) setActive(currentShot >= totalShots ? 1 : currentShot + 1);
+    else setActive(currentShot <= 1 ? totalShots : currentShot - 1);
+  });
+
   // ── Travelling device ──
-  const device = document.getElementById('device');
+  const device = deviceEl;
   const heroPh = document.getElementById('hero-ph');
   const storyAnchor = document.getElementById('story-anchor');
   const storySection = document.getElementById('story');
@@ -298,15 +337,21 @@
 
   // Only run on desktop (sticky story layout)
   const mql = window.matchMedia('(min-width: 1025px)');
+  const heroSection = document.querySelector('.hero');
+
   function initDevice() {
     if (mql.matches) {
+      // Desktop: move device to body end, enable floating
+      document.body.appendChild(device);
       device.classList.add('is-floating');
       window.addEventListener('scroll', tickDevice, { passive: true });
       window.addEventListener('resize', tickDevice);
       tickDevice();
     } else {
+      // Mobile: move device into hero (after spacer), disable floating
       device.classList.remove('is-floating');
       device.style = '';
+      heroSection.appendChild(device);
       window.removeEventListener('scroll', tickDevice);
       window.removeEventListener('resize', tickDevice);
     }

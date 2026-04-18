@@ -31,7 +31,7 @@
   --ease-out: cubic-bezier(.16,1,.3,1);
 }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
 body {
   font-family: var(--font);
@@ -141,6 +141,7 @@ button { font: inherit; }
   position: relative;
   padding: 80px 28px 0;
   text-align: center;
+  overflow: hidden;
 }
 .hero-bg {
   position: absolute; inset: 0; z-index: -1;
@@ -258,6 +259,48 @@ button { font: inherit; }
   object-fit: contain;
 }
 .device-shot.is-active { opacity: 1; }
+
+/* Carousel controls (mobile only) */
+.device-nav {
+  display: none;              /* hidden on desktop */
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 14px 0 4px;
+  pointer-events: auto;
+}
+.device-btn {
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.device-btn:hover { background: var(--accent-bg); color: var(--accent); }
+.device-dots {
+  display: flex;
+  gap: 8px;
+}
+.device-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-3);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background .25s, transform .25s;
+}
+.device-dot.is-active {
+  background: var(--accent);
+  transform: scale(1.25);
+}
 
 /* ═══════════════════════════════════════════════════════════════
    STORY (sticky scroll)
@@ -554,6 +597,7 @@ button { font: inherit; }
    RESPONSIVE
    ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
+  /* Device moves into hero via JS — show inline */
   .hero-device-space { display: none; }
   .device {
     position: relative !important;
@@ -563,33 +607,68 @@ button { font: inherit; }
     max-width: 700px;
     margin: 40px auto 0;
     opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto;
   }
-  .story { padding: 40px 28px 40px; }
+  .device-nav { display: flex; }
+  /* Story: single column, all steps visible */
+  .story { padding: 60px 28px 40px; }
   .story-track {
     grid-template-columns: 1fr;
     gap: 40px;
   }
   .story-anchor { display: none; }
-  .story-step { min-height: auto; padding: 28px 0; opacity: 1; }
+  .story-step {
+    min-height: auto;
+    padding: 28px 0;
+    opacity: 1;
+  }
+  /* Flow inside step: keep horizontal but smaller */
+  .flow-inner { gap: 14px; }
+  .flow-icon { width: 44px; height: 44px; }
+  .flow-icon img { width: 36px; height: 36px; }
+  .flow-step h3 { font-size: .88rem; }
 }
 
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .features-grid { grid-template-columns: 1fr; }
-  .flow-inner { flex-direction: column; align-items: center; gap: 12px; }
+  /* Flow inside step: go vertical on narrow screens */
+  .flow-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
   .flow-arrow { transform: rotate(90deg); }
   .flow-step { max-width: 280px; }
+  /* Story track gap */
+  .story-track { gap: 28px; }
+  .story-step + .story-step {
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+  /* Smaller CTA */
+  .cta { padding: 80px 28px; }
 }
 
 @media (max-width: 640px) {
-  .nav-inner { padding: 0 20px; }
-  .hero { padding: 56px 20px 0; }
-  .flow { padding: 20px 20px 40px; }
-  .story { padding: 40px 20px 20px; }
-  .features { padding: 70px 20px; }
-  .cta { padding: 80px 20px; }
-  .page-content { padding: 60px 20px 80px; }
-  .support-form { padding: 24px; }
+  .nav-inner { padding: 0 16px; gap: 12px; }
+  .hero { padding: 48px 16px 0; }
+  .hero-title { font-size: clamp(1.8rem, 7vw, 2.6rem); }
+  .hero-sub { font-size: .95rem; }
+  .hero-cta { gap: 10px; }
+  .btn { padding: 12px 20px; font-size: .88rem; }
+  .btn-lg { padding: 14px 24px; font-size: .9rem; }
+  .device { max-width: 100%; margin: 32px auto 0; }
+  .story { padding: 40px 16px 20px; }
+  .story-step h2 { font-size: 1.4rem; }
+  .story-step p { font-size: .92rem; }
+  .features { padding: 60px 16px; }
+  .feature-card { padding: 28px 20px; }
+  .cta { padding: 60px 16px; }
+  .page-content { padding: 48px 16px 60px; }
+  .support-form { padding: 20px; }
+  .footer { padding: 36px 16px 28px; }
   .footer-inner { flex-direction: column; text-align: center; gap: 16px; }
   .footer-links { margin-left: 0; }
   .footer-fine { text-align: center; }
