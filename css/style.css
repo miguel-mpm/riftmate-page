@@ -182,7 +182,7 @@ button { font: inherit; }
 
 /* Spacer — reserves space in the hero where the floating device visually sits */
 .hero-device-space {
-  max-width: 1320px;
+  max-width: 1600px;
   margin: 60px auto 0;
   aspect-ratio: 1.54; /* match MacBook frame image ratio */
 }
@@ -306,14 +306,14 @@ button { font: inherit; }
    STORY (sticky scroll)
    ═══════════════════════════════════════════════════════════════ */
 .story {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 40px 40px 60px;
 }
 .story-track {
   display: grid;
-  grid-template-columns: 3fr 2fr;
-  gap: 80px;
+  grid-template-columns: 3fr 1.4fr;
+  gap: 60px;
   align-items: flex-start;
 }
 /* Empty column — the floating device sits over this area */

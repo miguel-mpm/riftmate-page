@@ -9,11 +9,11 @@
   <meta property="og:description" content="Auto-record every League match on Mac. Jump to any kill, death or objective in a click.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://riftmate.lol">
-  <meta property="og:image" content="https://riftmate.lol/images/frame_filled_1.png">
+  <meta property="og:image" content="https://riftmate.lol/images/frame_filled_2.png">
   <meta name="theme-color" content="#0a0e14">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" type="image/png" href="images/favicon.png">
-  <link rel="preload" as="image" href="images/frame_filled_1.png">
+  <link rel="preload" as="image" href="images/frame_filled_2.png">
 </head>
 <body>
 
@@ -206,8 +206,9 @@
 <!-- Floating device (position controlled by JS) -->
 <div class="device" id="device">
   <div class="device-shots">
-    <img class="device-shot is-active" data-shot="1" src="images/frame_filled_1.png" alt="RiftMate game library with recorded League of Legends matches">
-    <img class="device-shot" data-shot="2" src="images/frame_filled_2.png" alt="Replay view with event timeline">
+    <img class="device-shot" data-shot="1" src="images/frame_filled_1.png" alt="RiftMate game library with recorded League of Legends matches">
+    <img class="device-shot is-active" data-shot="2" src="images/frame_filled_2.png" alt="Replay view with event timeline">
+    <img class="device-shot" data-shot="3" src="images/frame_filled_3.png" alt="Death review filter on the timeline">
   </div>
   <!-- Mobile carousel controls -->
   <div class="device-nav">
@@ -215,8 +216,9 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
     <div class="device-dots">
-      <button class="device-dot is-active" data-dot="1" aria-label="Screenshot 1"></button>
-      <button class="device-dot" data-dot="2" aria-label="Screenshot 2"></button>
+      <button class="device-dot" data-dot="1" aria-label="Screenshot 1"></button>
+      <button class="device-dot is-active" data-dot="2" aria-label="Screenshot 2"></button>
+      <button class="device-dot" data-dot="3" aria-label="Screenshot 3"></button>
     </div>
     <button class="device-btn device-next" aria-label="Next screenshot">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
@@ -243,24 +245,34 @@
   const steps = document.querySelectorAll('.story-step');
   const shots = document.querySelectorAll('.device-shot');
   const dots  = document.querySelectorAll('.device-dot');
-  let currentShot = 1;
+  let currentShot = 2;
   const totalShots = shots.length;
+
+  // ── Mobile carousel (custom order: ff2 → ff3 → ff1) ──
+  const mobileOrder = [2, 3, 1];
+  let mobileIdx = 0; // index into mobileOrder
 
   const setActive = (n) => {
     currentShot = Number(n);
+    // Keep mobileIdx in sync
+    const idx = mobileOrder.indexOf(currentShot);
+    if (idx !== -1) mobileIdx = idx;
     steps.forEach(s => s.classList.toggle('is-active', s.dataset.step === String(n)));
     shots.forEach(s => s.classList.toggle('is-active', s.dataset.shot === String(n)));
-    dots.forEach(d => d.classList.toggle('is-active', d.dataset.dot === String(n)));
+    dots.forEach((d, i) => d.classList.toggle('is-active', i === mobileIdx));
   };
 
-  // ── Mobile carousel prev/next ──
-  document.querySelector('.device-prev').addEventListener('click', () => {
-    setActive(currentShot <= 1 ? totalShots : currentShot - 1);
-  });
-  document.querySelector('.device-next').addEventListener('click', () => {
-    setActive(currentShot >= totalShots ? 1 : currentShot + 1);
-  });
-  dots.forEach(d => d.addEventListener('click', () => setActive(d.dataset.dot)));
+  function carouselNav(dir) {
+    mobileIdx = (mobileIdx + dir + mobileOrder.length) % mobileOrder.length;
+    setActive(mobileOrder[mobileIdx]);
+  }
+
+  document.querySelector('.device-prev').addEventListener('click', () => carouselNav(-1));
+  document.querySelector('.device-next').addEventListener('click', () => carouselNav(1));
+  dots.forEach((d, i) => d.addEventListener('click', () => {
+    mobileIdx = i;
+    setActive(mobileOrder[i]);
+  }));
 
   // ── Swipe on device to change screenshots ──
   const deviceEl = document.getElementById('device');
@@ -271,8 +283,7 @@
     const dx = e.changedTouches[0].clientX - touchX0;
     touchX0 = null;
     if (Math.abs(dx) < 40) return;
-    if (dx < 0) setActive(currentShot >= totalShots ? 1 : currentShot + 1);
-    else setActive(currentShot <= 1 ? totalShots : currentShot - 1);
+    carouselNav(dx < 0 ? 1 : -1);
   });
 
   // ── Travelling device ──
@@ -329,9 +340,9 @@
       device.style.visibility = 'visible';
     }
 
-    // Reset to shot 1 when above story
+    // Reset to hero shot (frame_filled_2) when above story
     if (sr.top > vh * 0.7) {
-      setActive(1);
+      setActive(2);
     }
   }
 
@@ -364,7 +375,17 @@
       if (e.isIntersecting) setActive(e.target.dataset.step);
     });
   }, { threshold: 0.45 });
-  steps.forEach(s => stepIo.observe(s));
+
+  function initStepObserver() {
+    if (mql.matches) {
+      steps.forEach(s => stepIo.observe(s));
+    } else {
+      steps.forEach(s => stepIo.unobserve(s));
+      setActive(2); // Reset to hero shot on mobile
+    }
+  }
+  mql.addEventListener('change', initStepObserver);
+  initStepObserver();
 </script>
 
 </body>
