@@ -140,7 +140,6 @@ button { font: inherit; }
 .hero {
   position: relative;
   padding: 80px 28px 0;
-  overflow: hidden;
   text-align: center;
 }
 .hero-bg {
@@ -180,15 +179,85 @@ button { font: inherit; }
   display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
 }
 
-/* Hero image */
-.hero-device {
+/* Spacer — reserves space in the hero where the floating device visually sits */
+.hero-device-space {
   max-width: 1100px;
   margin: 60px auto 0;
-  will-change: transform;
+  aspect-ratio: 1.54; /* match MacBook frame image ratio */
 }
-.hero-device img {
+
+/* ═══════════════════════════════════════════════════════════════
+   FLOW (3-step hook)
+   ═══════════════════════════════════════════════════════════════ */
+.flow {
+  padding: 40px 28px 60px;
+}
+.flow-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.flow-step {
+  flex: 1;
+  text-align: center;
+  max-width: 180px;
+}
+.flow-icon {
+  width: 52px; height: 52px;
+  margin: 0 auto 12px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+}
+.flow-icon img {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+}
+.flow-icon--lol,
+.flow-icon--review {
+  font-size: 1.4rem;
+  color: var(--accent);
+}
+.flow-arrow {
+  display: flex; align-items: center;
+  color: var(--text-3);
+  flex-shrink: 0;
+}
+.flow-step h3 {
+  font-family: var(--font-head);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FLOATING DEVICE
+   ═══════════════════════════════════════════════════════════════ */
+.device {
+  pointer-events: none;
+  z-index: 50;
+  will-change: transform, width, top, left, opacity;
+}
+.device.is-floating {
+  position: fixed;
+}
+.device-shots { position: relative; }
+.device-shot {
   width: 100%;
+  display: block;
+  opacity: 0;
+  transition: opacity .6s var(--ease-out);
 }
+.device-shot:not(:first-child) {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  object-fit: contain;
+}
+.device-shot.is-active { opacity: 1; }
 
 /* ═══════════════════════════════════════════════════════════════
    STORY (sticky scroll)
@@ -196,7 +265,7 @@ button { font: inherit; }
 .story {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 120px 40px 60px;
+  padding: 40px 40px 60px;
 }
 .story-track {
   display: grid;
@@ -204,29 +273,10 @@ button { font: inherit; }
   gap: 80px;
   align-items: flex-start;
 }
-.story-visual {
-  position: sticky;
-  top: 80px;
-  padding: 20px 0;
+/* Empty column — the floating device sits over this area */
+.story-anchor {
+  aspect-ratio: 1.54;
 }
-
-.story-shots {
-  position: relative;
-}
-.story-shot {
-  width: 100%;
-  display: block;
-  opacity: 0;
-  transition: opacity .6s var(--ease-out);
-}
-/* Stack all shots on top of each other; first is in flow, rest are absolute */
-.story-shot:not(:first-child) {
-  position: absolute;
-  inset: 0;
-  height: 100%;
-  object-fit: contain;
-}
-.story-shot.is-active { opacity: 1; }
 
 .story-text {
   display: flex; flex-direction: column;
@@ -281,7 +331,7 @@ button { font: inherit; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   FEATURES
+   FEATURES — 2-col grid
    ═══════════════════════════════════════════════════════════════ */
 .section-head {
   max-width: 620px;
@@ -308,7 +358,7 @@ button { font: inherit; }
 }
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
@@ -319,7 +369,6 @@ button { font: inherit; }
   background: var(--bg);
   padding: 36px 32px;
 }
-.feature-card--wide { grid-column: span 2; }
 .feature-label {
   display: inline-block;
   font-size: .7rem; font-weight: 600;
@@ -334,53 +383,10 @@ button { font: inherit; }
   line-height: 1.35;
   margin-bottom: 8px;
 }
-.feature-card--wide h3 {
-  font-size: 1.3rem;
-}
 .feature-card p {
   color: var(--text-2);
   font-size: .9rem;
   line-height: 1.6;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   HOW IT WORKS
-   ═══════════════════════════════════════════════════════════════ */
-.how {
-  max-width: var(--max-w);
-  margin: 0 auto;
-  padding: 40px 28px 120px;
-}
-.how-steps {
-  list-style: none;
-  max-width: 680px;
-  margin: 0 auto;
-  display: flex; flex-direction: column;
-  gap: 0;
-}
-.how-step {
-  display: flex; gap: 24px; align-items: flex-start;
-  padding: 32px 0;
-  border-bottom: 1px solid var(--border);
-}
-.how-step:last-child { border-bottom: none; }
-.how-num {
-  flex-shrink: 0;
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  border: 1px solid var(--border-2);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono);
-  font-size: .8rem; font-weight: 600;
-  color: var(--text-2);
-}
-.how-step h3 {
-  font-size: 1rem; font-weight: 600;
-  margin-bottom: 4px;
-}
-.how-step p {
-  color: var(--text-2);
-  font-size: .9rem;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -548,34 +554,39 @@ button { font: inherit; }
    RESPONSIVE
    ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
-  .story { padding: 80px 28px 40px; }
+  .hero-device-space { display: none; }
+  .device {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: auto !important;
+    max-width: 700px;
+    margin: 40px auto 0;
+    opacity: 1 !important;
+  }
+  .story { padding: 40px 28px 40px; }
   .story-track {
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  .story-visual {
-    position: relative;
-    top: auto;
-    order: -1;
-    max-width: 700px;
-    margin: 0 auto;
-  }
+  .story-anchor { display: none; }
   .story-step { min-height: auto; padding: 28px 0; opacity: 1; }
 }
 
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .features-grid { grid-template-columns: 1fr; }
-  .feature-card--wide { grid-column: auto; }
+  .flow-inner { flex-direction: column; align-items: center; gap: 12px; }
+  .flow-arrow { transform: rotate(90deg); }
+  .flow-step { max-width: 280px; }
 }
 
 @media (max-width: 640px) {
   .nav-inner { padding: 0 20px; }
   .hero { padding: 56px 20px 0; }
-  .hero-device { margin-top: 40px; }
-  .story { padding: 60px 20px 20px; }
+  .flow { padding: 20px 20px 40px; }
+  .story { padding: 40px 20px 20px; }
   .features { padding: 70px 20px; }
-  .how { padding: 20px 20px 80px; }
   .cta { padding: 80px 20px; }
   .page-content { padding: 60px 20px 80px; }
   .support-form { padding: 24px; }
