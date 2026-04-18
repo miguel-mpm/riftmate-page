@@ -181,7 +181,7 @@ button { font: inherit; }
 
 /* Spacer — reserves space in the hero where the floating device visually sits */
 .hero-device-space {
-  max-width: 1100px;
+  max-width: 1320px;
   margin: 60px auto 0;
   aspect-ratio: 1.54; /* match MacBook frame image ratio */
 }
@@ -190,7 +190,7 @@ button { font: inherit; }
    FLOW (3-step hook)
    ═══════════════════════════════════════════════════════════════ */
 .flow {
-  padding: 40px 28px 60px;
+  padding: 24px 0 0;
 }
 .flow-inner {
   max-width: 640px;
