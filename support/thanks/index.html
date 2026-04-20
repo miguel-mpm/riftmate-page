@@ -9,6 +9,19 @@
     gtag('js', new Date());
 
     gtag('config', 'AW-17679265287');
+
+    function gtag_report_conversion(url) {
+      var callback = function () {
+        if (typeof(url) != 'undefined') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion', {
+          'send_to': 'AW-17679265287/NAHhCLXH4J8cEIfckO5B',
+          'event_callback': callback
+      });
+      return false;
+    }
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +42,7 @@
       <a href="../../support/">Support</a>
       <a href="../../privacy/">Privacy</a>
     </div>
-    <a href="https://apps.apple.com/app/apple-store/id6758271118?pt=127842410&ct=riftmate.lol&mt=8" class="nav-cta">Download</a>
+    <a href="https://apps.apple.com/app/apple-store/id6758271118?pt=127842410&ct=riftmate.lol&mt=8" class="nav-cta" onclick="return gtag_report_conversion(this.href);">Download</a>
   </div>
 </nav>
 
