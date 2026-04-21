@@ -11,11 +11,15 @@
     gtag('config', 'AW-17679265287');
 
     function gtag_report_conversion(url) {
+      var navigated = false;
       var callback = function () {
-        if (typeof(url) != 'undefined') {
+        if (!navigated && typeof(url) != 'undefined') {
+          navigated = true;
           window.location = url;
         }
       };
+
+      window.setTimeout(callback, 500);
       gtag('event', 'conversion', {
           'send_to': 'AW-17679265287/NAHhCLXH4J8cEIfckO5B',
           'event_callback': callback
